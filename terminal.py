@@ -23,11 +23,12 @@ window_height = screen_width/3
 window_position_x = screen_width/2 - window_width/2
 window_position_y = screen_height/2 - window_height/2
 root.geometry('%dx%d+%d+%d' % (window_width, window_height, window_position_x, window_position_y))
+root.state('zoomed')
 
 # scrolled text box used to display the serial data
 frame = tk.Frame(root, bg='cyan')
 frame.pack(side="bottom", fill='both', expand='no')
-textbox = tkscrolledtext.ScrolledText(master=frame, wrap='word', width=180, height=25) #width=characters, height=lines
+textbox = tkscrolledtext.ScrolledText(master=frame, wrap='word', width=screen_width, height=25) #width=characters, height=lines
 textbox.pack(side='bottom', fill='y', expand=True, padx=0, pady=0)
 textbox.config(font="bold")
 
@@ -84,23 +85,6 @@ def SendDataCommand():
     else:
         textbox.insert('1.0', "Not sent - COM port is closed\r\n")
 
-def ReplayLogFile():
-    try:
-      if logFile != None:
-        readline = logFile.readline()
-        global serialPort
-        serialPort.Send(readline)
-    except:
-      print("Exception in ReplayLogFile()")
-
-def ReplayLogThread():
-    while True:
-        time.sleep(1.0)
-        global logFile
-        if serialPort.IsOpen():
-            if logFile != None:
-                ReplayLogFile()
-
 def Lower_Head():
     
     lower = "c0"
@@ -140,33 +124,33 @@ button_cleardata = Button(root,text="Clear Rx Data",width=20,command=ClearDataCo
 button_cleardata.config(font="bold")
 button_cleardata.place(x=210,y=72)
 
-#Send Message button
-button_senddata = Button(root,text="Manual Command",width=20,command=SendDataCommand)
-button_senddata.config(font="bold")
-button_senddata.place(x=620,y=30)
+#Manual Command button
+button_command = Button(root,text="Manual Command",width=20,command=SendDataCommand)
+button_command.config(font="bold")
+button_command.place(x=210,y=114)
 
 #Lower button
-button_replaylog = Button(root,text="Lower",width=16,command=Lower_Head)
-button_replaylog.config(font="bold")
-button_replaylog.place(x=433,y=30)
+button_lower = Button(root,text="Lower",width=16,height=5,bg="red",command=Lower_Head)
+button_lower.config(font="bold")
+button_lower.place(x=(screen_width/2)-80,y=30)
 
 #Purge/Fill button
-button_about = Button(root,text="Purge/Fill",width=16,command=PurgeFill)
-button_about.config(font="bold")
-button_about.place(x=433,y=72)
+button_fill = Button(root,text="Purge/Fill",width=16,height=5,bg="green",command=PurgeFill)
+button_fill.config(font="bold")
+button_fill.place(x=(screen_width/2)-80,y=150)
 
 #Raise Button
-button_tutorials = Button(root,text="Raise",width=16,command=Raise_Head)
-button_tutorials.config(font="bold")
-button_tutorials.place(x=433,y=110)
+button_raise = Button(root,text="Raise",width=16,height=5,bg="blue",command=Raise_Head)
+button_raise.config(font="bold")
+button_raise.place(x=(screen_width/2)-80,y=270)
 
 #
 # data entry labels and entry boxes
 #
 
-#Send Data entry box
-senddata_edit = Entry(root,width=34)
-senddata_edit.place(x=620,y=78)
+#Send Command entry box
+senddata_edit = Entry(root,width=21)
+senddata_edit.place(x=210,y=156)
 senddata_edit.config(font="bold")
 senddata_edit.insert(END,"Command")
 
