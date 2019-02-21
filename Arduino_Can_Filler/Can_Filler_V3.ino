@@ -27,10 +27,10 @@ void loop() {
       if(state==0)
         {
             lower();
-            delay(6000);
+            delay(3000);
             fill();
             raise_();
-            delay(6000);
+            delay(3000);
             Serial.print(state);      
         }
     }
